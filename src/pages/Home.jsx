@@ -39,12 +39,36 @@ const UrlShortenerForm = ({ addUrl }) => {
         valid = false;
         return 'Please enter a valid URL.';
       }
+      return '';
+    });
+    setErrors(newErrors);
 
-    setInputs([{ longUrl: '', validity: '' }]);
-    setErrors(['']);
+    if (valid) {
+      setInputs([{ longUrl: '', validity: '' }]);
+      setErrors(['']);
+    }
   };
 
   return (
+    <form onSubmit={handleSubmit}>
+      {inputs.map((input, idx) => (
+        <div key={idx}>
+          <input
+            type="text"
+            value={input.longUrl}
+            onChange={(e) => handleChange(idx, 'longUrl', e.target.value)}
+            placeholder="Enter long URL"
+          />
+          <button type="button" onClick={() => handleRemoveField(idx)}>Remove</button>
+          {errors[idx] && <p style={{ color: 'red' }}>{errors[idx]}</p>}
+        </div>
+      ))}
+      <button type="button" onClick={handleAddField}>Add another URL</button>
+      <button type="submit">Shorten URLs</button>
+    </form>
+  );
+};
+
 const Home = () => {
   const [urls, setUrls] = useState([]);
 
